@@ -5,8 +5,12 @@
 #include <math.h>
 
 //double camera_eye[3] = {1, 1, 5};
-double camera_eye[3] = {0, 0, 0};
 double random_scale_matrix[5][5];
+double radius = 5.0;
+double max[3] = {radius, 8.0, radius};
+double min[3] = {radius * (-1.0), 3.0, radius * (-1.0)};
+double camera_eye[3] = {radius, 5.0, 0};
+double step[3] = {0.1, 0.07, 0.1};
 
 float randomf() {
 	return ((float)rand())/RAND_MAX;
@@ -104,9 +108,14 @@ void temporizador() {
 	t++;
 	//printf("%d ", t);	
 	if (t == 2112 * 73) {	
+		//camera_eye[0] = ((int)camera_eye[0] + 1) % 10;
+		//camera_eye[2] = ((int)camera_eye[2] + 1) % 10;
 		for (int i = 0; i < 3; i++) {
-			camera_eye[i] = ((int)camera_eye[i] + 1) % 10;
+			if (camera_eye[i] >= max[i] || camera_eye[i] <= min[i])
+				step[i] *= -1.0;
+			camera_eye[i] += step[i];
 		}
+		
 		glutPostRedisplay();
 		t = 0;
 		//printf("================================================");
