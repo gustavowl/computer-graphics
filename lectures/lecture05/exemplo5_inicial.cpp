@@ -4,7 +4,8 @@
 #include <time.h>
 #include <math.h>
 
-double camera_eye[3] = {1, 1, 5};
+//double camera_eye[3] = {1, 1, 5};
+double camera_eye[3] = {0, 0, 0};
 double random_scale_matrix[5][5];
 
 float randomf() {
@@ -102,10 +103,10 @@ int t = 0;
 void temporizador() {
 	t++;
 	//printf("%d ", t);	
-	if (t == 2112 * 73) {
-		//camera_eye[0] = ((int)camera_eye[0] + 1) % 15;
-		//camera_eye[2] = ((int)camera_eye[2] + 1) % 15;
-		//camera_eye[2] = (camera_eye[2] + 1);
+	if (t == 2112 * 73) {	
+		for (int i = 0; i < 3; i++) {
+			camera_eye[i] = ((int)camera_eye[i] + 1) % 10;
+		}
 		glutPostRedisplay();
 		t = 0;
 		//printf("================================================");
