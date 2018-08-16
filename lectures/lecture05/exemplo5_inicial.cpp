@@ -4,18 +4,27 @@
 #include <time.h>
 #include <math.h>
 
+#define PI 3.1415926535897932
+
 //double camera_eye[3] = {1, 1, 5};
 double random_scale_matrix[5][5];
-double radius = 5.0;
-double max[3] = {radius, 8.0, radius};
-double min[3] = {radius * (-1.0), 3.0, radius * (-1.0)};
-double camera_eye[3] = {radius, 5.0, 0};
-double step[3] = {0.1, 0.07, 0.1};
+double radius = 5.5;
+int angle_xz = 0, angle_y = 0;
+//double max[3] = {radius, 8.0, radius};
+//double min[3] = {radius * (-1.0), 3.0, radius * (-1.0)};
+double camera_eye[3] = {cos(angle_xz) * radius,
+	sin(angle_y) * radius,
+	sin(angle_xz) * radius};
+//double step[3] = {0.1, 0.07, 0.1};
+int step_xz = 3, step_y = 2;
 
 float randomf() {
 	return ((float)rand())/RAND_MAX;
 }
 
+double degress_to_rad(int degrees) {
+	return degrees * PI / 180.0;
+}
 
 void initialize_random_scale_matrix() {
 	for (int i = 0; i < 5; i++) {
@@ -26,6 +35,13 @@ void initialize_random_scale_matrix() {
 }
 
 void inicializacao() {
+	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
+	glShadeModel(GL_FLAT);
+	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
+
 	//cor de fundo eh cinza
 	glClearColor(0.8, 0.8, 0.8, 0.0);
 
@@ -69,7 +85,7 @@ void funcaoDisplay() {
 	printProjection();
 
 	//limpa a tela com a cor de fundo
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -86,7 +102,8 @@ void funcaoDisplay() {
 			//glScalef(1.0, i+3.0, 1.0);
 			glScalef(1.0, random_scale_matrix[i+2][j+2], 1.0);
 			glTranslatef((double)i, 0.25, (double)j);
-			glutWireCube(0.5);
+			//glutWireCube(0.5);
+			glutSolidCube(0.5);
 			glPopMatrix();
 		}
 	}
@@ -103,19 +120,29 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 }
 
 int t = 0;
+double rad = 0.0;
 
 void temporizador() {
 	t++;
 	//printf("%d ", t);	
-	if (t == 2112 * 73) {	
+	if (t == 2112 * 73) {
 		//camera_eye[0] = ((int)camera_eye[0] + 1) % 10;
 		//camera_eye[2] = ((int)camera_eye[2] + 1) % 10;
-		for (int i = 0; i < 3; i++) {
+		/*for (int i = 0; i < 3; i++) {
 			if (camera_eye[i] >= max[i] || camera_eye[i] <= min[i])
 				step[i] *= -1.0;
 			camera_eye[i] += step[i];
-		}
-		
+		}*/
+
+		angle_xz = (angle_xz + step_xz) % 360;
+		rad = degress_to_rad(angle_xz);
+		camera_eye[0] = cos(rad) * radius;
+		camera_eye[2] = sin(rad) * radius;
+
+		angle_y = (angle_y + step_y) % 360;
+		rad = degress_to_rad(angle_y);
+		camera_eye[1] = sin(rad) * radius;
+
 		glutPostRedisplay();
 		t = 0;
 		//printf("================================================");
@@ -126,7 +153,7 @@ int main(int argc, char **argv) {
 
 	srand(time(NULL));
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Predios");
