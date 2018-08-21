@@ -38,6 +38,21 @@ float lagrange(float *v, int n, float t) {
 	return res;
 }
 
+void renderGraph(float *x, float *y, int size, int seg) {
+	float prev_x, prev_y;
+	prev_x = lagrange(x, size, 0);
+	prev_y = lagrange(y, size, 0);
+
+	glBegin(GL_LINES);
+		for (float i = 1; i <= seg; i++) {
+			glVertex2f(prev_x, prev_y);
+			prev_x = lagrange(x, size, i/seg);
+			prev_y = lagrange(y, size, i/seg);
+			glVertex2f(prev_x, prev_y);
+		}
+	glEnd();
+}
+
 void funcaoDisplay() {
 
 	glMatrixMode(GL_PROJECTION);
@@ -66,6 +81,7 @@ void funcaoDisplay() {
 
 	//renderize a curva utilizando n segmentos de reta
 	int n = 20;
+	renderGraph(vx, vy, 3, n);
 
 	//escreve um texto na tela para acompanhar a coordenada para t = tAtual
 	glRasterPos2f(px+0.1, py+0.1);
