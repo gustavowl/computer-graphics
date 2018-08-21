@@ -17,7 +17,7 @@ void inicializacao() {
 	glClearColor(0.5, 0.5, 0.5, 0.0);
 }
 
-void printVector(float *v, int n) {
+/*void printVector(float *v, int n) {
 	printf("v[] = {");
 	n--;
 	for (int i = 0; i < n; i++) {
@@ -26,13 +26,14 @@ void printVector(float *v, int n) {
 	printf("%f", v[n]);
 	printf("}\n");
 
-}
+}*/
 
 //retorna o valor v(t), onde n é a quantidade de pontos
 //se v é vx, então quando t = 0 deve retornar vx[0]
 //			e quando t = 1 deve retornar vx[n-1]
 float lagrange(float *v, int n, float t) {
-	printVector(v, n);
+	//supposes points are ordered by x-axis
+	//printVector(v, n);
 	
 	float res = 0.0;
 	float lt;
@@ -40,17 +41,21 @@ float lagrange(float *v, int n, float t) {
 		lt = 1.0;
 		for (int j = 0; j < n; j++) {
 			if (j != i) {
-				lt *= (t - v[j]) / (v[i] - v[j]);
-				printf("HEEEYlt %f\t", lt);
+				lt *= (t - (float)j/(n - 1 )) / 
+					((float)(i - j) / (n - 1)  );
+				/*printf("HEEEYlt %f\t", lt);
+				printf("%d ", (float)(i-j)/(n-1));
+				printf("%d ", i-j);
+				printf("%d ", n-1);*/
 			}
 		}
-		printf("\nbackres %f", res);
-		res += lt;
-		printf("\nltloop %f | resloop %f\n", lt, res);
+		//printf("\nbackres %f", res);
+		res += lt * v[i];
+		//printf("\nltloop %f | resloop %f\n", lt, res);
 	}
-	printf("t = %f\n", t);
+	/*printf("t = %f\n", t);
 	printf("res = %f\n", res);
-	printf("-------------\n");
+	printf("-------------\n");*/
 	return res;
 }
 
