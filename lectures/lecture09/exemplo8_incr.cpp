@@ -29,6 +29,14 @@ void inicializacao() {
 //implementacao recursiva (nao use memoization)
 //retorna o ponto da curva bezier em t considerando os pontos Pa, ..., Pb
 float bezier(vector<float> v, int a, int b, float t) {
+	//assert(a < b)
+	if (v.size() > 1) {
+		if (a+1 != b) {
+			return (1.0 - t) * bezier(v, a, b-1, t) +
+				t * bezier(v, a+1, b, t);
+		}
+		return (1.0 - t) * v.at(a) + t * v.at(b);
+	}
 	return 0;
 }
 
@@ -66,8 +74,8 @@ void funcaoDisplay() {
 	}
 
 	//renderização de tAtual
-	float px = bezier2(vx, tAtual);
-	float py = bezier2(vy, tAtual);
+	float px = bezier(vx, 0, vx.size() - 1, tAtual);
+	float py = bezier(vy, 0, vy.size() - 1, tAtual);
 
 	glColor3f(1, 1, 1);
 	glPointSize(6.0);
