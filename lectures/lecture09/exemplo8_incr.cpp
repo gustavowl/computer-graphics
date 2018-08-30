@@ -42,7 +42,17 @@ float bezier(vector<float> v, int a, int b, float t) {
 
 //implementacao nao recursiva
 //retorna o ponto da curva bezier em t considerando os pontos P0, ..., Pv.size()-1
+//De Casteljau
 float bezier2(vector<float> v, float t) {
+	printf("size: %lu\n", v.size());
+	if (v.size() > 1) {
+		for (int i = 1; i < v.size(); i++) {
+			for (int j = 0; j < v.size() - i; j++) {
+				v.at(j) = (1 - t) * v.at(j) + t * v.at(j+1);
+			}	
+		}
+		return v.at(0);
+	}
 	return 0;
 }
 
@@ -74,8 +84,10 @@ void funcaoDisplay() {
 	}
 
 	//renderização de tAtual
-	float px = bezier(vx, 0, vx.size() - 1, tAtual);
-	float py = bezier(vy, 0, vy.size() - 1, tAtual);
+	//float px = bezier(vx, 0, vx.size() - 1, tAtual);
+	//float py = bezier(vy, 0, vy.size() - 1, tAtual);
+	float px = bezier2(vx, tAtual);
+	float py = bezier2(vy, tAtual);
 
 	glColor3f(1, 1, 1);
 	glPointSize(6.0);
