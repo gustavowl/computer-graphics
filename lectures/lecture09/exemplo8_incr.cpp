@@ -40,6 +40,22 @@ float bezier(vector<float> v, int a, int b, float t) {
 	return 0;
 }
 
+//Render for bezier
+void renderGraph(vector<float> x, vector<float> y, int seg) {
+	float prev_x = bezier(x, 0, vx.size() - 1, 0);
+	float prev_y = bezier(y, 0, vy.size() -1, 0);
+
+	glColor3f(0, 1, 0);
+	glBegin(GL_LINES);
+		for (float i = 1; i <= seg; i++) {
+			glVertex2f(prev_x, prev_y);
+			prev_x = bezier(x, 0, vx.size() - 1, i/seg);
+			prev_y = bezier(y, 0, vy.size() -1, i/seg);
+			glVertex2f(prev_x, prev_y);
+		}
+	glEnd();
+}
+
 //implementacao nao recursiva
 //retorna o ponto da curva bezier em t considerando os pontos P0, ..., Pv.size()-1
 //De Casteljau
@@ -56,6 +72,21 @@ float bezier2(vector<float> v, float t) {
 	return 0;
 }
 
+//Render for De Casteljau
+void renderGraph2(vector<float> x, vector<float> y, int seg) {
+	float prev_x = bezier2(x, 0);
+	float prev_y = bezier2(y, 0);
+
+	glColor3f(1, 0, 0);
+	glBegin(GL_LINES);
+		for (float i = 1; i <= seg; i++) {
+			glVertex2f(prev_x, prev_y);
+			prev_x = bezier2(x, i/seg);
+			prev_y = bezier2(y, i/seg);
+			glVertex2f(prev_x, prev_y);
+		}
+	glEnd();
+}
 
 void funcaoDisplay() {
 
@@ -107,8 +138,9 @@ void funcaoDisplay() {
 
 	//renderizacao da curva de bezier
 	//assim como na interpolacao por Lagrange, utilize varios segmentos de reta para compor a curva
-	
-
+	int segNum = 20; //TODO: DEFINE CONSTANT
+	//renderGraph(vx, vy,  segNum);
+	renderGraph2(vx, vy,  segNum);
 
 
 	//escreve um texto na tela para acompanhar a coordenada para t = tAtual
