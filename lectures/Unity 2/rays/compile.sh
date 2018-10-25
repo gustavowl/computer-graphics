@@ -1,2 +1,2 @@
-g++ rays.cpp -lGL -lGLU -lglut -o rays
+g++ rays.cpp -lGL -lGLU -lglut -o rays.out
 ./rays.out

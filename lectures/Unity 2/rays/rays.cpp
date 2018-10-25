@@ -65,12 +65,6 @@ void printProjection() {
 }
 
 void funcaoDisplay() {
-	//mensagem para verificar quando esta funcao eh chamada
-	/*system("clear");
-	printf("display\n");
-	printModelView();
-	printProjection();*/
-
 	//limpa a tela com a cor de fundo
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -81,24 +75,26 @@ void funcaoDisplay() {
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2],
 		0, 0, 0, 0, 1, 0);
 	
-	glColor3f(0, 0, 0);
-	//desenhar um grid de cubos esticados verticalmente (predios)
-	/*for (int i = -2; i <= 2; i++) {
-		for (int j = -2; j <= 2; j++) {
-			glPushMatrix();
-			//glScalef(1.0, i+3.0, 1.0);
-			glScalef(1.0, random_scale_matrix[i+2][j+2], 1.0);
-			glTranslatef((double)i, 0.25, (double)j);
-			//glutWireCube(0.5);
-			glutSolidCube(0.5);
-			glPopMatrix();
-		}
-	}*/
 	glPushMatrix();
+	glColor3f(0, 1, 0); //TODO: change color
+
+	//draw plane
+	glBegin(GL_QUADS);
+		glVertex3f(-3, 0, -3);
+		glVertex3f(-3, 0, 3);
+		glVertex3f(3, 0, 3);
+		glVertex3f(3, 0, -3);
+	glEnd();
+
+	//draw cube
 	glTranslatef(0, 0.5, 0);
 	glutSolidCube(1);
-	glPopMatrix();
 
+	//draw sphere
+	glTranslatef(0, 0, -2);
+	glutSolidSphere(0.5, 50, 50);
+
+	glPopMatrix();
 	glFlush();
 	glutSwapBuffers();
 }
