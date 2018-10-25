@@ -6,17 +6,14 @@
 
 #define PI 3.1415926535897932
 
-//double camera_eye[3] = {1, 1, 5};
-double random_scale_matrix[5][5];
+double camera_eye[3] = {1, 2, 3};
 double radius = 5.5;
 int angle_xz = 0, angle_y = 0;
 //double max[3] = {radius, 8.0, radius};
 //double min[3] = {radius * (-1.0), 3.0, radius * (-1.0)};
-double camera_eye[3] = {cos(angle_xz) * radius,
+/*double camera_eye[3] = {cos(angle_xz) * radius,
 	sin(angle_y) * radius,
-	sin(angle_xz) * radius};
-//double step[3] = {0.1, 0.07, 0.1};
-int step_xz = 3, step_y = 2;
+	sin(angle_xz) * radius};*/
 
 float randomf() {
 	return ((float)rand())/RAND_MAX;
@@ -24,14 +21,6 @@ float randomf() {
 
 double degress_to_rad(int degrees) {
 	return degrees * PI / 180.0;
-}
-
-void initialize_random_scale_matrix() {
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			random_scale_matrix[i][j] = randomf() * 3;
-		}
-	}
 }
 
 void inicializacao() {
@@ -50,8 +39,6 @@ void inicializacao() {
 	glFrustum(-1, 1, -1, 1, 1.5, 20.0);
 	//glOrtho(-1, 1, -1, 1, 1.5, 20.0);
 	//gluPerspective(60, 1, 1.5, 60.0);
-
-	initialize_random_scale_matrix();
 
 }
 
@@ -121,10 +108,10 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 	if(key == 'q')
 		exit(-1);
 
-	//go back and forward
-	if(key == 'k')
+	//go left and right
+	if(key == 'd')
 		camera_eye[0] += 0.1;
-	if(key == 'i')
+	if(key == 'a')
 		camera_eye[0] -= 0.1;
 
 	//go up and down
@@ -133,10 +120,10 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 	if(key == 's')
 		camera_eye[1] -= 0.1;
 
-	//go left and right
-	if(key == 'a')
+	//go back and forward
+	if(key == 'k')
 		camera_eye[2] += 0.1;
-	if(key == 'd')
+	if(key == 'i')
 		camera_eye[2] -= 0.1;
 
 	glutPostRedisplay();
