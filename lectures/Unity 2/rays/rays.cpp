@@ -14,6 +14,10 @@ int angle_xz = 0, angle_y = 0;
 /*double camera_eye[3] = {cos(angle_xz) * radius,
 	sin(angle_y) * radius,
 	sin(angle_xz) * radius};*/
+GLfloat cubeColor[4] = {1, 0, 0, 1};
+GLfloat sphereColor[4] = {0, 1, 0, 1};
+GLfloat planeColor[4] = {0, 0, 1, 1};
+
 
 float randomf() {
 	return ((float)rand())/RAND_MAX;
@@ -27,6 +31,10 @@ void inicializacao() {
 	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
 	glShadeModel(GL_FLAT);
 	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
+
+	//GLfloat glVetorCor[4] = {1, 0, 0, 0};
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, glVetorCor);
+	
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
@@ -76,21 +84,30 @@ void funcaoDisplay() {
 		0, 0, 0, 0, 1, 0);
 	
 	glPushMatrix();
-	glColor3f(0, 1, 0); //TODO: change color
-
+	
 	//draw plane
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, planeColor);
 	glBegin(GL_QUADS);
-		glVertex3f(-3, 0, -3);
-		glVertex3f(-3, 0, 3);
-		glVertex3f(3, 0, 3);
-		glVertex3f(3, 0, -3);
+		glVertex3f(-3, -0.1, -3);
+		glVertex3f(3, -0.1, -3);
+		glVertex3f(3, -0.1, 3);
+		glVertex3f(-3, -0.1, 3);
+		/*for ( int x = -50; x < 50; x++ )
+			for ( int z = -50; z < 50; z++ ) {
+			        glVertex3f( x  , 0, z   );
+			        glVertex3f( x  , 0, z+1 );
+		        	glVertex3f( x+1, 0, z+1 );
+	        		glVertex3f( x+1, 0, z   );
+			}*/
 	glEnd();
 
 	//draw cube
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
 	glTranslatef(0, 0.5, 0);
 	glutSolidCube(1);
 
 	//draw sphere
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, sphereColor);
 	glTranslatef(0, 0, -2);
 	glutSolidSphere(0.5, 50, 50);
 
