@@ -88,10 +88,11 @@ void funcaoDisplay() {
 	//draw plane
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, planeColor);
 	glBegin(GL_QUADS);
-		glVertex3f(-3, -0.1, -3);
-		glVertex3f(3, -0.1, -3);
-		glVertex3f(3, -0.1, 3);
-		glVertex3f(-3, -0.1, 3);
+		glNormal3f(0, 1, 0);
+		glVertex3f(-3, 0, -3);
+		glVertex3f(3, 0, -3);
+		glVertex3f(3, 0, 3);
+		glVertex3f(-3, 0, 3);
 		/*for ( int x = -50; x < 50; x++ )
 			for ( int z = -50; z < 50; z++ ) {
 			        glVertex3f( x  , 0, z   );
