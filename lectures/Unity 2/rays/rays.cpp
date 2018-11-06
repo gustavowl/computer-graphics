@@ -9,15 +9,26 @@
 double camera_eye[3] = {1, 2, 3};
 double radius = 5.5;
 int angle_xz = 0, angle_y = 0;
-//double max[3] = {radius, 8.0, radius};
-//double min[3] = {radius * (-1.0), 3.0, radius * (-1.0)};
-/*double camera_eye[3] = {cos(angle_xz) * radius,
-	sin(angle_y) * radius,
-	sin(angle_xz) * radius};*/
+
 GLfloat cubeColor[4] = {1, 0, 0, 1};
 GLfloat sphereColor[4] = {0, 1, 0, 1};
 GLfloat planeColor[4] = {0, 0, 1, 1};
 
+//https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
+unsigned char* data;
+int width, height;
+GLuint* tex_v;
+
+
+void loadPPM(char *filename) {
+    FILE *arq = fopen(filename, "r");
+    char format[3];
+    int max;
+    fscanf(arq, "%s %d %d %d\n", format, &width, &height, &max);
+    data = (unsigned char *) malloc(sizeof(unsigned char)*width*height*3);
+    fread(data, sizeof(unsigned char), width*height*3, arq);
+    fclose(arq);
+}
 
 float randomf() {
 	return ((float)rand())/RAND_MAX;
@@ -26,7 +37,6 @@ float randomf() {
 double degress_to_rad(int degrees) {
 	return degrees * PI / 180.0;
 }
-
 void inicializacao() {
 	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
 	glShadeModel(GL_FLAT);
@@ -38,6 +48,7 @@ void inicializacao() {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE);
 
 	//cor de fundo eh cinza
 	glClearColor(0.8, 0.8, 0.8, 0.0);
@@ -47,6 +58,11 @@ void inicializacao() {
 	glFrustum(-1, 1, -1, 1, 1.5, 20.0);
 	//glOrtho(-1, 1, -1, 1, 1.5, 20.0);
 	//gluPerspective(60, 1, 1.5, 60.0);
+
+	glGenTextures(1, tex_v);
+	loadPPM("imagem.ppm");
+	/*glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+		0, GL_RGB, GL_UNSIGNED_BYTE, data);*/
 
 }
 
@@ -86,20 +102,25 @@ void funcaoDisplay() {
 	glPushMatrix();
 	
 	//draw plane
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, planeColor);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, planeColor);
+	//glbindtexture(...
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+		0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glBegin(GL_QUADS);
 		glNormal3f(0, 1, 0);
+
+		glTexCoord2f(0, 0);
 		glVertex3f(-3, 0, -3);
+
+		glTexCoord2f(0, 1);
 		glVertex3f(3, 0, -3);
+
+		glTexCoord2f(1, 1);
 		glVertex3f(3, 0, 3);
+
+		glTexCoord2f(1, 0);
 		glVertex3f(-3, 0, 3);
-		/*for ( int x = -50; x < 50; x++ )
-			for ( int z = -50; z < 50; z++ ) {
-			        glVertex3f( x  , 0, z   );
-			        glVertex3f( x  , 0, z+1 );
-		        	glVertex3f( x+1, 0, z+1 );
-	        		glVertex3f( x+1, 0, z   );
-			}*/
 	glEnd();
 
 	//draw cube
