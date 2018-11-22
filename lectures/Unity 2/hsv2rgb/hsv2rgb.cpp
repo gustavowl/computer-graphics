@@ -1,21 +1,6 @@
-#include <stdio.h>
+#include "hsv2rgb.h"
 
 //Code found at https://stackoverflow.com/questions/3018313/algorithm-to-convert-rgb-to-hsv-and-hsv-to-rgb-in-range-0-255-for-both
-
-typedef struct {
-    double r;       // a fraction between 0 and 1
-    double g;       // a fraction between 0 and 1
-    double b;       // a fraction between 0 and 1
-} rgb;
-
-typedef struct {
-    double h;       // angle in degrees
-    double s;       // a fraction between 0 and 1
-    double v;       // a fraction between 0 and 1
-} hsv;
-
-static hsv   rgb2hsv(rgb in);
-static rgb   hsv2rgb(hsv in);
 
 hsv rgb2hsv(rgb in)
 {
@@ -118,14 +103,4 @@ rgb hsv2rgb(hsv in)
         break;
     }
     return out;     
-}
-
-int main() {
-	hsv lux = {225, 1, 1};
-	rgb colour = hsv2rgb(lux);
-
-	printf("R: %f, G: %f, B: %f\n", 
-		colour.r * 255, colour.g * 255, colour.b * 255);
-
-	return 0;
 }

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
+#include "hsv2rgb.h"
 
 #define PI 3.1415926535897932
 
