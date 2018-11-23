@@ -11,9 +11,13 @@ double camera_eye[3] = {1, 2, 3};
 double radius = 5.5;
 int angle_xz = 0, angle_y = 0;
 
+hsv hsv_cube = {0.0, 1.0, 1.0};
+hsv hsv_sphere = {180.0, 1.0, 1.0};
+rgb rgb_cube, rgb_sphere;
+
 GLfloat cubeColor[4] = {1, 0, 0, 1};
 GLfloat sphereColor[4] = {0, 1, 0, 1};
-GLfloat planeColor[4] = {0, 0, 1, 1};
+GLfloat planeColor[4] = {0.3, 0.3, 0.3, 1};
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
@@ -27,8 +31,22 @@ float randomf() {
 double degress_to_rad(int degrees) {
 	return degrees * PI / 180.0;
 }
+
+void updateCubeSphereColors() {
+	rgb_cube = hsv2rgb(hsv_cube);
+	rgb_sphere = hsv2rgb(hsv_sphere);
+
+	cubeColor[0] = rgb_cube.r;
+	cubeColor[1] = rgb_cube.g;
+	cubeColor[2] = rgb_cube.b;
+
+	sphereColor[0] = rgb_sphere.r;
+	sphereColor[1] = rgb_sphere.g;
+	sphereColor[2] = rgb_sphere.b;
+}
+
 void inicializacao() {
-	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
+	GLfloat posicaoLuz[4]={50.0, 0.0, 50.0, 1.0};
 	glShadeModel(GL_FLAT);
 	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
 
@@ -48,7 +66,8 @@ void inicializacao() {
 	glFrustum(-1, 1, -1, 1, 1.5, 20.0);
 	//glOrtho(-1, 1, -1, 1, 1.5, 20.0);
 	//gluPerspective(60, 1, 1.5, 60.0);
-
+	
+	updateCubeSphereColors();
 }
 
 void printModelView() {
@@ -87,7 +106,8 @@ void funcaoDisplay() {
 	glPushMatrix();
 	
 	//draw plane
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, planeColor);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, planeColor);
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
 	glBegin(GL_QUADS);
 		glNormal3f(0, 1, 0);
 
@@ -107,13 +127,15 @@ void funcaoDisplay() {
 	//draw cube
 	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, cubeColor);
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
 	glTranslatef(0, 0.5, 0);
 	glutSolidCube(1);
 
 	//draw sphere
 	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sphereColor);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, sphereColor);
-	glTranslatef(0, 0, -2);
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sphereColor);
+	glTranslatef(0, 1.1, 0);
 	glutSolidSphere(0.5, 50, 50);
 
 	glPopMatrix();
@@ -125,7 +147,7 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 
 	if(key == 'q')
 		exit(-1);
-
+/*
 	//go left and right
 	if(key == 'd')
 		camera_eye[0] += 0.1;
@@ -142,7 +164,7 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 	if(key == 'k')
 		camera_eye[2] += 0.1;
 	if(key == 'i')
-		camera_eye[2] -= 0.1;
+		camera_eye[2] -= 0.1;*/
 
 	glutPostRedisplay();
 }
@@ -153,6 +175,14 @@ void temporizador() {
 	t++;
 	//printf("%d ", t);	
 	if (t == 2112 * 73) {
+		hsv_cube.h++;
+		hsv_cube.h = ((int) hsv_cube.h) % 360;
+
+		hsv_sphere.h++;
+		hsv_sphere.h = ((int) hsv_sphere.h) % 360;
+
+		updateCubeSphereColors();
+
 		glutPostRedisplay();
 		t = 0;
 	}

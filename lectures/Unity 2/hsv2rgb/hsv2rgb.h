@@ -1,3 +1,6 @@
+#ifndef __HSV2RGB__
+#define __HSV2RGB__
+
 typedef struct {
 	    double r;       // a fraction between 0 and 1
 		    double g;       // a fraction between 0 and 1
@@ -10,5 +13,7 @@ typedef struct {
 			    double v;       // a fraction between 0 and 1
 } hsv;
 
-static hsv   rgb2hsv(rgb in);
-static rgb   hsv2rgb(hsv in);
+hsv rgb2hsv(rgb in);
+rgb hsv2rgb(hsv in);
+
+#endif

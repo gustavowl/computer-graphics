@@ -1,2 +1,2 @@
-g++ rays.cpp hsv2rgb.cpp -lGL -lGLU -lglut -o rays.out
+g++ *.cpp -lGL -lGLU -lglut -o rays.out -Wall
 ./rays.out
